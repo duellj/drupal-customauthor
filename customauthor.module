@@ -225,9 +225,11 @@ function customauthor_form_node_type_form_alter(array &$form, array $form_state)
 function customauthor_username_alter(&$name, $account) {
   // Try to tell if this is a node that has customauthor.
   if (isset($account->customauthor)) {
-    if ($account->customauthor['mode'] === CUSTOMAUTHOR_OTHER_USER) {
+    if ($account->customauthor['mode'] === CUSTOMAUTHOR_OTHER_USER && !empty($account->customauthor['other_uid'])) {
       $other_user = user_load($account->customauthor['other_uid']);
-      $name = $other_user->name;
+      if ($other_user) {
+        $name = $other_user->name;
+      }
     }
     elseif ($account->customauthor['mode'] === CUSTOMAUTHOR_OTHER) {
       $name = $account->customauthor['other'];
